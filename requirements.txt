@@ -1,4 +1,3 @@
-python==3.8
 streamlit==1.22.0
 snowflake-snowpark-python==1.4.0
 snowflake-connector-python==3.0.3
