@@ -96,7 +96,7 @@ if choice == 'Graph.':
 
         ## Courtesy of Snowflake
 
-        -Covid-19 Cases and Deaths in Colombia throughout 2020 (1:3)
+        - Covid-19 Cases and Deaths in Colombia throughout 2020 (1:3)
 
         ''')
 
