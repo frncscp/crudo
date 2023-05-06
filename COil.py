@@ -1,7 +1,5 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-import openpyxl
+
 
 #streamlit run Colombia's_Oil_Dependance.py
 
