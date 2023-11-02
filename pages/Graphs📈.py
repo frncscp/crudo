@@ -15,46 +15,46 @@ st.title("COil: graphs")
 root_dir = os.getcwd()
 
 #For snowflake's tables
-@st.cache_resource
-def create_session():
-    return Session.builder.configs(st.secrets.snowflake).create()
-session = create_session()
+#@st.cache_resource
+#def create_session():
+#    return Session.builder.configs(st.secrets.snowflake).create()
+#session = create_session()
 
 @st.cache_data
 def load_data(table_name):
     table = session.table(table_name)
     table = table.collect()
     return table
-table_name = "COLCOV_V3.PUBLIC.MACANCAN"
-covcol = load_data(table_name)
+#table_name = "COLCOV_V3.PUBLIC.MACANCAN"
+#covcol = load_data(table_name)
 
 #database import
-df_covcol = pd.DataFrame(covcol, columns = ["date", "cases", "deaths"])
-df_covcol = df_covcol.rename(columns = {'date' : 'Date'})
+#df_covcol = pd.DataFrame(covcol, columns = ["date", "cases", "deaths"])
+#df_covcol = df_covcol.rename(columns = {'date' : 'Date'})
 cop2usd_dataset = pd.read_csv(os.path.join(root_dir, r"banrep_cop2usd.csv"), usecols= ["Date", "Dollar in COP"])
 ecopetrol_stock_dataset = pd.read_csv(os.path.join(root_dir, r"ECOPETROL.CL.csv"), usecols = ["Date", "Close"])
 brent_dataset = pd.read_csv(os.path.join(root_dir, r"brent.csv"), usecols= ["Date", "Close"])
 
 #date formatting
-df_covcol['Date'] = pd.to_datetime(df_covcol['Date']).dt.date
+#df_covcol['Date'] = pd.to_datetime(df_covcol['Date']).dt.date
 cop2usd_dataset['Date'] = pd.to_datetime(cop2usd_dataset['Date']).dt.date
 ecopetrol_stock_dataset['Date'] = pd.to_datetime(ecopetrol_stock_dataset['Date']).dt.date
 brent_dataset['Date'] = pd.to_datetime(brent_dataset['Date']).dt.date
 
 #non-scaled
-ns_df_covcol = df_covcol.copy()
+#ns_df_covcol = df_covcol.copy()
 ns_cop2usd_dataset = cop2usd_dataset
 ns_ecopetrol_stock_dataset = ecopetrol_stock_dataset
 ns_brent_dataset = brent_dataset
 
 #scaling
-df_covcol['cases'] = df_covcol['cases']/3
-df_covcol['deaths'] = df_covcol['deaths']/3
+#df_covcol['cases'] = df_covcol['cases']/3
+#df_covcol['deaths'] = df_covcol['deaths']/3
 brent_dataset['Close'] = brent_dataset['Close']*30
 
 #renaming
 brent_dataset = brent_dataset.rename(columns = {'Close' : 'Brent Crude'})
-df_covcol = df_covcol.rename(columns = {'cases' : 'Covid-19 Cases', 'deaths' : 'Covid-19 Deaths'})
+#df_covcol = df_covcol.rename(columns = {'cases' : 'Covid-19 Cases', 'deaths' : 'Covid-19 Deaths'})
 ecopetrol_stock_dataset =  ecopetrol_stock_dataset.rename(columns={'Close': 'Ecopetrol\'s Stock'})
 
 st.divider()
@@ -77,13 +77,13 @@ if choice == 'Graph.':
 
         #merge of all databases
         pre_merge = pd.merge(ecopetrol_stock_dataset, cop2usd_dataset, on='Date', how='left')
-        merge = pd.merge(pre_merge, brent_dataset, on='Date', how='left')
-        final_merge = pd.merge(merge, df_covcol, on='Date', how='left')
+        final_merge = pd.merge(pre_merge, brent_dataset, on='Date', how='left')
+        #final_merge = pd.merge(merge, df_covcol, on='Date', how='left')
 
         #plot
         st.line_chart(final_merge,
         x = 'Date',
-        y = ['1 COP -> Dollar', 'Ecopetrol\'s Stock', 'Brent Crude', 'Covid-19 Cases', 'Covid-19 Deaths'])
+        y = ['1 COP -> Dollar', 'Ecopetrol\'s Stock', 'Brent Crude'])#, 'Covid-19 Cases', 'Covid-19 Deaths'])
 
         st.markdown('''
         # Values
@@ -93,18 +93,16 @@ if choice == 'Graph.':
         - Ecopetrol\'s Stock Price
 
         - Global Brent Crude Price (30:1)
-
-        ## Courtesy of Snowflake
-
-        - Covid-19 Cases and Deaths in Colombia throughout 2020 (1:3)
-
         ''')
 
+        ## Courtesy of Snowflake - Covid-19 Cases and Deaths in Colombia throughout 2020 (1:3)
+
+    
     else:
         #merge of all databases
         pre_merge = pd.merge(ecopetrol_stock_dataset, cop2usd_dataset, on='Date', how='left')
-        merge = pd.merge(pre_merge, brent_dataset, on='Date', how='left')
-        final_merge = pd.merge(merge, df_covcol, on='Date', how='left')
+        final_merge = pd.merge(pre_merge, brent_dataset, on='Date', how='left')
+        #final_merge = pd.merge(merge, df_covcol, on='Date', how='left')
 
         #plot
         st.line_chart(final_merge,
@@ -130,8 +128,8 @@ elif choice == 'Dataframes.':
         st.markdown("Global Brent Crude Price")
         st.dataframe(ns_brent_dataset)
 
-        st.markdown("Covid-19 Cases and Deaths in Colombia (2020)")
-        st.dataframe(ns_df_covcol)
+        #st.markdown("Covid-19 Cases and Deaths in Colombia (2020)")
+        #st.dataframe(ns_df_covcol)
 
 #shows my cat
 elif choice == 'The developer\'s cat.':
