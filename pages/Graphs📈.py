@@ -107,7 +107,7 @@ if choice == 'Graph.':
         #plot
         st.line_chart(final_merge,
         x = 'Date',
-        y = ['Dollar in COP', 'Ecopetrol\'s Stock', 'Brent Crude', 'Covid-19 Cases', 'Covid-19 Deaths'])
+        y = ['Dollar in COP', 'Ecopetrol\'s Stock', 'Brent Crude'])#, 'Covid-19 Cases', 'Covid-19 Deaths'])
 
 #show the raw dataframes
 elif choice == 'Dataframes.':
