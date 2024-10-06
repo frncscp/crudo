@@ -8,7 +8,7 @@ st.set_page_config(
     page_icon = "https://cdn3.iconfinder.com/data/icons/oil-gas/100/14-512.png",
     layout = 'wide'
 )
-st.title("COil: A brief introduction")
+st.title("Crudo: A brief introduction")
 #st.caption("This page participates in the Streamlit Hackathon Summit")
 
 st.divider()
